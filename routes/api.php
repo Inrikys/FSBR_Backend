@@ -14,21 +14,33 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/login', function (Request $request) {
-    return 'login';
-})->name('login');   
+// Route::post('/auth', 'api\AuthController@login')->name('auth.login');
 
-Route::get('/teste', 'api\UserController@index')->name('teste.index');
+// Route::get('/teste', 'api\UserController@index')->name('teste.index');
 
 Route::group(
     [
-        'middleware' => [''],
+        'middleware' => ['api'],
         'namespace' => 'api'
-    ], function () {
+    ],
+    function () {
 
-        Route::get('/users', 'UserController@index')->name('user.index'); 
-        Route::get('/users/{id}', 'UserController@show')->name('user.show'); 
+        Route::get('/users', 'UserController@index')->name('user.index');
+        Route::get('/users/{id}', 'UserController@show')->name('user.show');
         Route::post('/users', 'UserController@store')->name('user.store');
-        Route::put('/users/{id}', 'UserController@update')->name('user.update'); 
-        Route::delete('/users/{id}', 'UserController@destroy')->name('user.destroy');  
+        Route::put('/users/{id}', 'UserController@update')->name('user.update');
+        Route::delete('/users/{id}', 'UserController@destroy')->name('user.destroy');
+    }
+);
+
+Route::group([
+    'middleware' => ['api'],
+    'namespace' => 'api'
+
+], function ($router) {
+
+    Route::post('/login', 'AuthController@login');
+    // Route::post('logout', 'AuthController@logout');
+    // Route::post('refresh', 'AuthController@refresh');
+    // Route::post('me', 'AuthController@me');
 });
